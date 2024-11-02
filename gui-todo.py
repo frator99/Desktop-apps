@@ -1,5 +1,5 @@
 import FreeSimpleGUI as sg
-import functions
+import functions_todo
 
 label = sg.Text("inserisci un azione nella to-do list")
 
@@ -12,14 +12,17 @@ button = sg.Button("aggiungi")
 #in questo caso sono tutti su una riga
 #window = sg.Window("la mia to-do app", layout=[[label, inputbox, button]], font="Helvetica")
 
-#mentre per mettere il testo sopa la box verrebbe così:
-
-listbox = sg.Listbox(values=functions.get_todos(), enable_events=True, key="todos", size=[45, 10])
+#listbox che contiene il valore del file rest. dalla funz.
+listbox = sg.Listbox(values=functions_todo.get_todos(), enable_events=True, key="todos", size=[45, 10])
 
 button_list = sg.Button("edit")
 
-window = sg.Window("la mia to-do app", layout=[[label], [inputbox, button],
-                                               [listbox, button_list]], font="Helvetica")
+button_complete = sg.Button("complete")
+button_exit = sg.Button("exit")
+window = sg.Window("la mia to-do app", layout=[[label],
+                                               [inputbox, button],
+                                               [listbox, button_list , button_complete],
+                                               [button_exit]], font="Helvetica")
 
 
 #il metodo read dell'oggetto windows permette leggere i valori della finestra , come il bottone e le inputbox ,
@@ -33,12 +36,13 @@ while True:
     event ,values = window.read()
     print(event)
     print(values)
+
     match event:
         case "aggiungi":
-            todos = functions.get_todos()
+            todos = functions_todo.get_todos()
             new_todo = values['todo'] + "\n"
             todos.append(new_todo)
-            functions.write_todos(todos)
+            functions_todo.write_todos(todos)
             window['todos'].update(values=todos) #aggiorniamo la lista un avolta agg. nuovi items
         case sg.WIN_CLOSED:
             #aggiungiamo un case per quando premiamo la classica "x" per chudere una finestra,
@@ -49,10 +53,10 @@ while True:
             #todo è la chiave della prima inputbox, quindi scegliamo un valore nella listbox e lo sost.
             #con quello nella inputbox
             new_todo = values["todo"] + "\n"
-            todos = functions.get_todos()
+            todos = functions_todo.get_todos()
             index = todos.index(todo_to_edit)
             todos[index] = new_todo
-            functions.write_todos(todos)
+            functions_todo.write_todos(todos)
             #facciamo l'update della lista in gui a real-time , aggiornando il valore dell'oggetto windows
             window['todos'].update(values=todos)
             #con window[todos]indichiamo l'istanza della windows che ha come
@@ -62,6 +66,21 @@ while True:
             # qui aggiorniamo il campo della inputbox quando clicchiamo un items della list , in modo che
             #compaia il testo selezionato
             window['todo'].update(value=values['todos'][0])
+        case "complete":
+            todo_to_complete = values["todos"][0]
+            todos = functions_todo.get_todos()
+            #.index rest. indice dell'item
+            index = todos.index(todo_to_complete)
+            print("index = ", index, "che equivale a :", todos[index])
+            todos.pop(index)
+            functions_todo.write_todos(todos)
+            window["todos"].update(values=todos)
+            window["todo"].update(value='')
+        case "exit":
+            break
+
+
+
 
 
 
