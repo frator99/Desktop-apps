@@ -85,7 +85,7 @@ while True:
 
 
 
-#una volta usciti dal ciclo potremo chiudere la finestra con window.close
+#una volta usciti dal ciclo potremo chiudere la finestra con window.close.
 window.close()
 
 

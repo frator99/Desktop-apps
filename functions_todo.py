@@ -11,7 +11,7 @@ def write_todos(todos_arg, filepath=FILEPATH):
     with open(filepath, 'w') as file:
         file.writelines(todos_arg)
 
-#qui controlliamo se lo script è stato eseguito direttamente da questo file o se è stato richiamato
+#qui controlliamo se lo script è stato eseguito direttamente da questo file o se è stato richiamato.
 # da un frontend:
 if __name__ == "__main__":
     print("hello")
